@@ -5,10 +5,11 @@ import productCSV from "./ProductList.csv"
 const Main=()=>{
     const [search,setSearch]=useState("");
     const [data,setData]=useState([]);
-
     useEffect(() => {
         const fetchData = async () => {
-          const response = await fetch(productCSV);
+          const response = await fetch(
+           productCSV
+            );
           const csvData = await response.text();
           const parsedData = papa.parse(csvData, {
             header: true,
@@ -30,6 +31,24 @@ const Main=()=>{
             console.log("hello")
         }
     }
+
+    const handleClick = async (e) => {
+      e.preventDefault();
+      console.log("Happy")
+      const response = await fetch("http://localhost:5000/", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+      });
+      const json = await response.json();
+      console.log(json);
+      if (json.success) {
+        console.log(json);
+      } else {
+        console.log("Fail");
+      }
+    };
     return(
         <>
             <div className="header">
@@ -42,7 +61,7 @@ const Main=()=>{
                         <input type="text" placeholder="Enter Product Name Here . . ."
                         value={search} onChange={e=>setSearch(e.target.value)}
                         onKeyPress={searchProduct}/>
-
+                       <button onClick={handleClick}>Search</button>
                         </div>
                     <img src="./images/bg2.png" alt="" />
                 </div>
